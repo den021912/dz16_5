@@ -11,6 +11,8 @@ class User(BaseModel):
     text: str
     id: int = None
 
+
+
 @app.get('/')
 def get_all_messages(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("users.html", {"request": request, "text": users})
@@ -23,6 +25,9 @@ def get_message(request: Request, user_id: int) -> HTMLResponse:
         raise HTTPException(status_code=404, detail='Message not found')
 
 @app.post('/')
+def create_user(username:str, age:int):
+    username = username
+    age = age
 def create_message(request: Request, text: str = Form()) -> HTMLResponse:
     if users:
         user_id = max(users, key = lambda u: u.id).id + 1
@@ -30,25 +35,3 @@ def create_message(request: Request, text: str = Form()) -> HTMLResponse:
         user_id = 0
     users.append(User(id = user_id, text = text))
     return templates.TemplateResponse("users.html", {"request": request, "text": users})
-
-# @app.put("/message/{message_id}")
-# def update_message(message_id: int, message: str = Body()) -> str:
-#     try:
-#         edit_message = messages_db[message_id]
-#         edit_message.text = message
-#         return f'Message updated'
-#     except IndexError:
-#         raise HTTPException(status_code=404, detail='Message not found')
-#
-# @app.delete("/message/{message_id}")
-# def delete_message(message_id: int) -> str:
-#     try:
-#         messages_db.pop(message_id)
-#         return f"Message ID = {message_id} deleted"
-#     except IndexError:
-#         raise HTTPException(status_code=404, detail='Message not found')
-#
-# @app.delete("/")
-# def kill_messages_all() -> str:
-#     messages_db.clear()
-#     return 'All Messages deleted'
